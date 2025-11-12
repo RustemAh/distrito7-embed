@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Candidatos — Distrito 7 (Epicentro/NBC)</title>
+<style>
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+body { margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:#fff; color:#111; }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 12px; }
+
+/* Encabezado */
+.header { display:flex; flex-wrap:wrap; gap:10px; justify-content:space-between; align-items:flex-end; padding:6px 0 10px; border-bottom:1px solid #eee; }
+.header h1 { margin:0; font-size:22px; font-weight:900; }
+.meta { font-size:12px; color:#6b7280; }
+.hl { background:#FFD400; padding:6px 10px; border-radius:8px; font-weight:900; }
+
+/* Banner distrito */
+.district { margin-top:12px; border:1px solid #e5e7eb; border-radius:12px; overflow:hidden; }
+.district-top { background:#005CA9; color:#fff; padding:14px 16px; display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+.district-name { font-size:18px; font-weight:900; }
+.district-communes { font-size:12px; opacity:.95; }
+.kpis { display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; padding:12px; background:#f8fafc; border-top:1px solid #e5e7eb; }
+.kpi { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:10px 12px; display:flex; gap:10px; align-items:center; }
+.kpi .dot { width:12px; height:12px; border-radius:50%; background:#005CA9; }
+.kpi b { font-size:13px; display:block; color:#111; }
+.kpi span { font-size:13px; color:#374151; }
+.kpi a { color:#005CA9; font-weight:900; text-decoration:none; }
+@media (max-width:800px){ .kpis{grid-template-columns:1fr;} }
+
+/* Lista */
+.listbar { display:flex; align-items:center; gap:10px; padding:10px 12px; background:#f3f4f6; border:1px solid #e5e7eb; border-radius:12px; margin:14px 0 8px; font-weight:900; color:#0f172a; }
+.listdot { width:22px; height:22px; border-radius:50%; border:2px solid #e5e7eb; background:#fff; }
+
+/* Grid tarjetas */
+.grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; }
+@media(max-width:900px){.grid{grid-template-columns:1fr;}}
+
+/* Tarjetas */
+.card { border:1px solid #e5e7eb; border-radius:14px; overflow:hidden; background:#fff; }
+.card-hd { padding:12px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; gap:12px; }
+.img-wrap { position:relative; width:68px; height:68px; border-radius:50%; overflow:hidden; flex-shrink:0; background:#e5e7eb; }
+.img-wrap img { width:100%; height:100%; object-fit:cover; display:block; user-drag:none; user-select:none; -webkit-user-drag:none; pointer-events:none; }
+.img-wrap .blocker { position:absolute; inset:0; background:transparent; pointer-events:auto; cursor:default; }
+.titlebox { display:flex; flex-direction:column; gap:6px; }
+.name { font-weight:900; font-size:18px; }
+.sub { font-size:12px; color:#475569; }
+.badges { display:flex; gap:6px; flex-wrap:wrap; }
+.badge { display:inline-block; padding:4px 8px; border-radius:999px; background:#e5e7eb; color:#111827; font-size:12px; font-weight:700; }
+.badge.party { color:#fff; background:#005CA9; }
+.badge.num { background:#FFD400; color:#111; font-weight:900; }
+
+.card-bd { padding:12px; display:flex; flex-direction:column; gap:8px; }
+.rowkv { display:grid; grid-template-columns:140px 1fr; gap:8px; align-items:center; font-size:14px; }
+.k { color:#475569; }
+.v { color:#111; font-weight:600; }
+.desc { font-size:14px; color:#334155; line-height:1.45; background:#f8fafc; border:1px solid #e5e7eb; padding:10px; border-radius:10px; }
+
+/* Redes sociales */
+.card-ft { padding:10px 12px; border-top:1px solid #f1f5f9; display:flex; gap:10px; flex-wrap:wrap; }
+.socials { display:flex; gap:8px; }
+.socials a { text-decoration:none; display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; color:#fff; font-size:14px; }
+.fb{background:#3b5998;} .x{background:#000;} .ig{background:#e4405f;} .tk{background:#010101;}
+
+.footer { margin:14px 0 4px; font-size:12px; color:#6b7280; display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <h1>Guía de Candidatos — <span class="hl">Distrito 7</span></h1>
+    <div class="meta" id="ts">—</div>
+  </div>
+
+  <section class="district">
+    <div class="district-top">
+      <div>
+        <div class="district-name">Distrito 7</div>
+        <div class="district-communes">
+          Algarrobo, Cartagena, Casablanca, Concón, El Quisco, El Tabo, Isla de Pascua, Juan Fernández, San Antonio, Santo Domingo, Valparaíso y Viña del Mar.
+        </div>
+      </div>
+      <div class="hl">Elecciones 2025</div>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><div class="dot"></div><div><b>Electores</b><span> 842.134</span></div></div>
+      <div class="kpi"><div class="dot"></div><div><b>Cargos a elegir</b><span> 8</span></div></div>
+      <div class="kpi"><div class="dot"></div><div><b>Papeleta</b><span><a href="https://www.servel.cl/wp-content/uploads/2025/10/DIPUTADOS_07_05_REGION_DE_VALPARAISO.pdf" target="_blank" rel="noopener">Ver</a></span></div></div>
+    </div>
+  </section>
+
+  <div id="listsContainer"></div>
+
+  <div class="footer">
+    <div>Epicentro</div>
+    <div id="footstamp">—</div>
+  </div>
+</div>
+
+<script>
+const DATA_URL="https://docs.google.com/spreadsheets/d/1mD4qQ9dnczdJ4lI8p8bd8TrPQICyXZjXcD9RxLePrLo/export?format=csv";
+
+function stamp(){return new Date().toLocaleString("es-CL",{dateStyle:"medium",timeStyle:"short"});}
+function setStamp(){ts.textContent="Actualizado: "+stamp();footstamp.textContent="Generado: "+stamp();}
+function norm(s){return (s||"").replace(/["”“]/g,"").replace(/\s+/g," ").trim();}
+function parseCSV(text){const lines=text.split(/\r?\n/).filter(l=>l.trim());const h=lines.shift().split(",").map(x=>x.trim().toLowerCase());
+return lines.map(l=>{const c=l.split(","),o={};h.forEach((hh,i)=>o[hh]=c[i]?c[i].trim():"");return o;});}
+function listHeaderHTML(n){return `<div class='listbar'><div class='listdot'></div>${n}</div><div class='grid' data-list='${n}'></div>`;}
+function socials(r){const i=[];if(r.facebook)i.push(`<a href="${r.facebook}" target="_blank" class="fb" title="Facebook">f</a>`);if(r.x)i.push(`<a href="${r.x}" target="_blank" class="x" title="X">𝕏</a>`);if(r.instagram)i.push(`<a href="${r.instagram}" target="_blank" class="ig" title="Instagram">⌾</a>`);if(r.tiktok)i.push(`<a href="${r.tiktok}" target="_blank" class="tk" title="TikTok">♪</a>`);return i.length?`<div class='socials'>${i.join("")}</div>`:"";}
+function cardHTML(r){
+  const imgSrc=r.photo?`<img src="${r.photo}" alt="${r.candidate}" onerror="this.style.display='none';this.parentNode.style.background='#e5e7eb';">`:"";
+  return `<article class='card'>
+    <div class='card-hd'>
+      <div class='img-wrap no-ctx'>${imgSrc}<div class='blocker'></div></div>
+      <div class='titlebox'>
+        <div class='name'>${r.candidate||"—"}</div>
+        <div class='sub'>${r.party||""}</div>
+        <div class='badges'>
+          ${r.party?`<span class='badge party'>${r.party}</span>`:""}
+          ${r.cupo?`<span class='badge'>${r.cupo}</span>`:""}
+          ${r.number?`<span class='badge num'>${r.number}</span>`:""}
+        </div>
+      </div>
+    </div>
+    <div class='card-bd'>
+      <div class='rowkv'><div class='k'>Edad</div><div class='v'>${r.age||"—"}</div></div>
+      <div class='rowkv'><div class='k'>Profesión</div><div class='v'>${r.profession||"—"}</div></div>
+      <div class='rowkv'><div class='k'>Distrito</div><div class='v'>${r.district||"—"}</div></div>
+      <div class='desc'>${r.bio||""}</div>
+    </div>
+    <div class='card-ft'>${socials(r)}</div>
+  </article>`;
+}
+
+async function load(){
+  const res=await fetch(DATA_URL+"&t="+Date.now(),{cache:"no-store"});
+  const csv=await res.text();
+  const rows=parseCSV(csv);
+  const cont=document.getElementById("listsContainer");
+  cont.innerHTML="";
+  let current="";
+  rows.forEach(r=>{
+    const c=norm(r.candidate||"");
+    if(c.toLowerCase().startsWith("lista")){
+      current=c;cont.insertAdjacentHTML("beforeend",listHeaderHTML(current));
+    }else{
+      const grid=cont.querySelector(`[data-list='${current}']`);
+      if(grid)grid.insertAdjacentHTML("beforeend",cardHTML(r));
+    }
+  });
+  document.addEventListener('contextmenu',e=>{if(e.target.closest('.img-wrap'))e.preventDefault();});
+  setStamp();
+}
+load();
+</script>
+</body>
+</html>
