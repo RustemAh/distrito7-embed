@@ -68,7 +68,8 @@ body { margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto,
 @media(max-width:900px){.grid{grid-template-columns:1fr;}}
 
 /* Tarjetas */
-.card { border:1px solid #e5e7eb; border-radius:14px; overflow:hidden; background:#fff; }
+.card { border:1px solid #e5e7eb; border-radius:14px; overflow:hidden; background:#fff; transition:transform .15s; }
+.card:hover { transform:scale(1.01); }
 .card-hd { padding:12px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; gap:12px; }
 .img-wrap { position:relative; width:68px; height:68px; border-radius:50%; overflow:hidden; flex-shrink:0; background:#e5e7eb; }
 .img-wrap img { width:100%; height:100%; object-fit:cover; display:block; user-drag:none; user-select:none; -webkit-user-drag:none; pointer-events:none; }
@@ -141,7 +142,7 @@ body { margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto,
   <div class="scroll-zone">
     <div id="listsContainer"></div>
     <div class="footer">
-      <div>Desarrollado por El Epicentro Labs</div>
+      <div>Epicentro/NBC · Filtros funcionales y encabezado fijo</div>
       <div id="footstamp">—</div>
     </div>
   </div>
@@ -151,24 +152,76 @@ body { margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto,
 const DATA_URL="https://docs.google.com/spreadsheets/d/1mD4qQ9dnczdJ4lI8p8bd8TrPQICyXZjXcD9RxLePrLo/export?format=csv";
 
 function stamp(){return new Date().toLocaleString("es-CL",{dateStyle:"medium",timeStyle:"short"});}
-function setStamp(){document.getElementById('ts').textContent="Actualizado: "+stamp();document.getElementById('footstamp').textContent="Generado: "+stamp();}
 function norm(s){return (s||"").replace(/["”“]/g,"").replace(/\s+/g," ").trim();}
 function toIntAge(s){const m=String(s||"").match(/\d+/);return m?parseInt(m[0],10):NaN;}
-function parseCSV(text){const lines=text.split(/\r?\n/).filter(l=>l.trim());const h=lines.shift().split(",").map(x=>x.trim().toLowerCase());
-return lines.map(l=>{const c=l.split(","),o={};h.forEach((hh,i)=>o[hh]=c[i]?c[i].trim():"");return o;});}
-function listHeaderHTML(n){return `<div class='listbar'><div class='listdot'></div>${n}</div><div class='grid' data-list='${n}'></div>`;}
-function socials(r){const i=[];if(r.facebook)i.push(`<a href="${r.facebook}" target="_blank" class="fb" title="Facebook">f</a>`);if(r.x)i.push(`<a href="${r.x}" target="_blank" class="x" title="X">𝕏</a>`);if(r.instagram)i.push(`<a href="${r.instagram}" target="_blank" class="ig" title="Instagram">⌾</a>`);if(r.tiktok)i.push(`<a href="${r.tiktok}" target="_blank" class="tk" title="TikTok">♪</a>`);return i.length?`<div class='socials'>${i.join("")}</div>`:"";}
-function cardHTML(r){const img=r.photo?`<img src="${r.photo}" alt="${r.candidate}" onerror="this.style.display='none';this.parentNode.style.background='#e5e7eb';">`:"";const age=toIntAge(r.age);return `<article class='card' data-party="${norm(r.party)}" data-sex="${norm(r.sex)}" data-age="${isNaN(age)?'':age}">
-<div class='card-hd'><div class='img-wrap no-ctx'>${img}<div class='blocker'></div></div><div class='titlebox'><div class='name'>${r.candidate||"—"}</div><div class='sub'>${r.party||""}</div><div class='badges'>${r.party?`<span class='badge party'>${r.party}</span>`:""}${r.cupo?`<span class='badge'>${r.cupo}</span>`:""}${r.number?`<span class='badge num'>${r.number}</span>`:""}</div></div></div>
-<div class='card-bd'><div class='rowkv'><div class='k'>Edad</div><div class='v'>${r.age||"—"}</div></div><div class='rowkv'><div class='k'>Profesión</div><div class='v'>${r.profession||"—"}</div></div><div class='rowkv'><div class='k'>Distrito</div><div class='v'>${r.district||"—"}</div></div><div class='desc'>${r.bio||""}</div></div><div class='card-ft'>${socials(r)}</div></article>`;}
+function parseCSV(text){const l=text.split(/\r?\n/).filter(x=>x.trim());const h=l.shift().split(",").map(v=>v.trim().toLowerCase());
+return l.map(line=>{const c=line.split(","),o={};h.forEach((hh,i)=>o[hh]=c[i]?c[i].trim():"");return o;});}
 function isListHeaderRow(r){return norm(r.candidate||"").toLowerCase().startsWith("lista");}
-function populatePartyFilter(rows){const sel=document.getElementById("partyFilter"),set=new Set();rows.forEach(r=>{if(!isListHeaderRow(r)&&r.party)set.add(norm(r.party));});[...set].sort().forEach(p=>{const o=document.createElement("option");o.value=p;o.textContent=p;sel.appendChild(o);});}
-function updateVisibleCount(){const t=document.querySelectorAll('.card').length,v=[...document.querySelectorAll('.card')].filter(c=>c.style.display!=='none').length;document.getElementById('visibleCount').textContent=`${v}/${t} visibles`;}
-function applyFilters(){const pf=norm(partyFilter.value),sf=norm(sexFilter.value),min=parseInt(minAge.value)||NaN,max=parseInt(maxAge.value)||NaN;document.querySelectorAll('.card').forEach(c=>{const p=norm(c.dataset.party),s=norm(c.dataset.sex),a=parseInt(c.dataset.age)||NaN;let ok=true;if(pf&&p!==pf)ok=false;if(sf&&s!==sf)ok=false;if(!isNaN(min)&&(!a||a<min))ok=false;if(!isNaN(max)&&(!a||a>max))ok=false;c.style.display=ok?"":"none";});document.querySelectorAll('[data-list]').forEach(g=>{const vis=[...g.children].some(x=>x.style.display!=='none');g.style.display=vis?"":"none";const b=g.previousElementSibling;if(b&&b.classList.contains('listbar'))b.style.display=vis?"":"none";});updateVisibleCount();}
-function attachFilterEvents(){applyFilters();applyFiltersBtn.addEventListener('click',applyFilters);resetFilters.addEventListener('click',()=>{partyFilter.value='';sexFilter.value='';minAge.value='';maxAge.value='';applyFilters();});["partyFilter","sexFilter","minAge","maxAge"].forEach(id=>document.getElementById(id).addEventListener("input",applyFilters));}
-async function load(){const res=await fetch(DATA_URL+"&t="+Date.now(),{cache:"no-store"});const csv=await res.text();const rows=parseCSV(csv);const cont=document.getElementById("listsContainer");cont.innerHTML="";let cur="";rows.forEach(r=>{if(isListHeaderRow(r)){cur=norm(r.candidate);cont.insertAdjacentHTML("beforeend",listHeaderHTML(cur));}else{const g=cont.querySelector(`[data-list='${cur}']`);if(g)g.insertAdjacentHTML("beforeend",cardHTML(r));}});document.addEventListener('contextmenu',e=>{if(e.target.closest('.img-wrap'))e.preventDefault();});populatePartyFilter(rows);attachFilterEvents();setStamp();}
+function listHeaderHTML(n){return `<div class='listbar'><div class='listdot'></div>${n}</div><div class='grid' data-list='${n}'></div>`;}
+function socials(r){const i=[];if(r.facebook)i.push(`<a href="${r.facebook}" target="_blank" class="fb">f</a>`);if(r.x)i.push(`<a href="${r.x}" target="_blank" class="x">𝕏</a>`);if(r.instagram)i.push(`<a href="${r.instagram}" target="_blank" class="ig">⌾</a>`);if(r.tiktok)i.push(`<a href="${r.tiktok}" target="_blank" class="tk">♪</a>`);return i.length?`<div class='socials'>${i.join("")}</div>`:"";}
+function cardHTML(r){const img=r.photo?`<img src="${r.photo}" alt="${r.candidate}" onerror="this.style.display='none';this.parentNode.style.background='#e5e7eb';">`:"";const age=toIntAge(r.age);
+return `<article class='card' data-party="${norm(r.party)}" data-sex="${norm(r.sex)}" data-age="${isNaN(age)?'':age}">
+<div class='card-hd'><div class='img-wrap no-ctx'>${img}<div class='blocker'></div></div>
+<div class='titlebox'><div class='name'>${r.candidate||"—"}</div><div class='sub'>${r.party||""}</div>
+<div class='badges'>${r.party?`<span class='badge party'>${r.party}</span>`:""}${r.cupo?`<span class='badge'>${r.cupo}</span>`:""}${r.number?`<span class='badge num'>${r.number}</span>`:""}</div></div></div>
+<div class='card-bd'><div class='rowkv'><div class='k'>Edad</div><div class='v'>${r.age||"—"}</div></div><div class='rowkv'><div class='k'>Profesión</div><div class='v'>${r.profession||"—"}</div></div><div class='rowkv'><div class='k'>Distrito</div><div class='v'>${r.district||"—"}</div></div><div class='desc'>${r.bio||""}</div></div>
+<div class='card-ft'>${socials(r)}</div></article>`;}
+
+function populatePartyFilter(rows){const select=document.getElementById("partyFilter");const set=new Set();rows.forEach(r=>{if(!isListHeaderRow(r)&&r.party)set.add(norm(r.party));});
+Array.from(set).sort((a,b)=>a.localeCompare(b,'es')).forEach(p=>{const o=document.createElement("option");o.value=p;o.textContent=p;select.appendChild(o);});}
+
+function updateVisibleCount(){const total=document.querySelectorAll('.card').length;const visible=[...document.querySelectorAll('.card')].filter(c=>c.style.display!=='none').length;document.getElementById('visibleCount').textContent=`${visible}/${total} visibles`;}
+
+function applyFilters(){
+  const pf=norm(document.getElementById("partyFilter").value);
+  const sf=norm(document.getElementById("sexFilter").value);
+  const minA=parseInt(document.getElementById("minAge").value,10);
+  const maxA=parseInt(document.getElementById("maxAge").value,10);
+  document.querySelectorAll('.card').forEach(c=>{
+    const p=norm(c.dataset.party||""), s=norm(c.dataset.sex||""), a=parseInt(c.dataset.age,10);
+    let ok=true;
+    if(pf && p!==pf) ok=false;
+    if(sf && s!==sf) ok=false;
+    if(!isNaN(minA) && (isNaN(a) || a<minA)) ok=false;
+    if(!isNaN(maxA) && (isNaN(a) || a>maxA)) ok=false;
+    c.style.display=ok?"":"none";
+  });
+  document.querySelectorAll('[data-list]').forEach(g=>{
+    const visible=[...g.children].some(ch=>ch.style.display!=='none');
+    g.style.display=visible?"":"none";
+    const bar=g.previousElementSibling;
+    if(bar && bar.classList.contains('listbar')) bar.style.display=visible?"":"none";
+  });
+  updateVisibleCount();
+}
+
+function attachFilterEvents(){
+  document.getElementById("applyFilters").addEventListener("click",applyFilters);
+  document.getElementById("resetFilters").addEventListener("click",()=>{["partyFilter","sexFilter","minAge","maxAge"].forEach(id=>document.getElementById(id).value="");applyFilters();});
+  ["partyFilter","sexFilter","minAge","maxAge"].forEach(id=>document.getElementById(id).addEventListener("input",applyFilters));
+}
+
+async function load(){
+  const res=await fetch(DATA_URL+"&t="+Date.now(),{cache:"no-store"});
+  const csv=await res.text();
+  const rows=parseCSV(csv);
+  const cont=document.getElementById("listsContainer");
+  cont.innerHTML="";
+  let current="";
+  rows.forEach(r=>{
+    if(isListHeaderRow(r)){current=norm(r.candidate||"Lista");cont.insertAdjacentHTML("beforeend",listHeaderHTML(current));}
+    else{const grid=cont.querySelector(`[data-list='${current}']`);if(grid)grid.insertAdjacentHTML("beforeend",cardHTML(r));}
+  });
+  document.addEventListener('contextmenu',e=>{if(e.target.closest('.img-wrap'))e.preventDefault();});
+  populatePartyFilter(rows);
+  attachFilterEvents();
+  applyFilters();
+  document.getElementById("ts").textContent="Actualizado: "+stamp();
+  document.getElementById("footstamp").textContent="Generado: "+stamp();
+}
 load();
 </script>
 </body>
 </html>
+
 
