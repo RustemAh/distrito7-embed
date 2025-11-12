@@ -7,8 +7,22 @@
 <style>
 :root { color-scheme: light; }
 * { box-sizing: border-box; }
-body { margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:#fff; color:#111; }
-.wrap { max-width: 1100px; margin: 0 auto; padding: 12px; }
+body { margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:#fff; color:#111; height:100vh; overflow:hidden; }
+.wrap { max-width: 1100px; margin: 0 auto; height:100%; display:flex; flex-direction:column; }
+
+/* --- ENCABEZADO FIJO Y SCROLL INTERNO --- */
+.sticky-top {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.scroll-zone {
+  flex:1;
+  overflow-y: auto;
+  padding-bottom: 40px;
+}
 
 /* Encabezado */
 .header { display:flex; flex-wrap:wrap; gap:10px; justify-content:space-between; align-items:flex-end; padding:6px 0 10px; border-bottom:1px solid #eee; }
@@ -17,7 +31,7 @@ body { margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto,
 .hl { background:#FFD400; padding:6px 10px; border-radius:8px; font-weight:900; }
 
 /* Banner distrito */
-.district { margin-top:12px; border:1px solid #e5e7eb; border-radius:12px; overflow:hidden; }
+.district { border:1px solid #e5e7eb; border-radius:12px; overflow:hidden; margin-top:8px; }
 .district-top { background:#005CA9; color:#fff; padding:14px 16px; display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
 .district-name { font-size:18px; font-weight:900; }
 .district-communes { font-size:12px; opacity:.95; }
@@ -33,7 +47,7 @@ body { margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto,
 .filters { 
   display:flex; flex-wrap:wrap; gap:8px; align-items:center;
   background:#f8fafc; border:1px solid #e5e7eb; border-radius:12px;
-  padding:10px 12px; margin:14px 0;
+  padding:10px 12px; margin:10px 0;
 }
 .filters select, .filters input {
   border:1px solid #d1d5db; border-radius:6px; padding:6px 8px;
@@ -84,52 +98,52 @@ body { margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto,
 </head>
 <body>
 <div class="wrap">
-  <div class="header">
-    <h1>Candidatos — <span class="hl">Distrito 7</span></h1>
-    <div class="meta" id="ts">—</div>
-  </div>
+  <div class="sticky-top">
+    <div class="header">
+      <h1>Candidatos — <span class="hl">Distrito 7</span></h1>
+      <div class="meta" id="ts">—</div>
+    </div>
 
-  <!-- Banner distrito -->
-  <section class="district">
-    <div class="district-top">
-      <div>
-        <div class="district-name">Distrito 7</div>
-        <div class="district-communes">
-          Algarrobo, Cartagena, Casablanca, Concón, El Quisco, El Tabo, Isla de Pascua, Juan Fernández, San Antonio, Santo Domingo, Valparaíso y Viña del Mar.
+    <section class="district">
+      <div class="district-top">
+        <div>
+          <div class="district-name">Distrito 7</div>
+          <div class="district-communes">
+            Algarrobo, Cartagena, Casablanca, Concón, El Quisco, El Tabo, Isla de Pascua, Juan Fernández, San Antonio, Santo Domingo, Valparaíso y Viña del Mar.
+          </div>
         </div>
+        <div class="hl">Elecciones 2025</div>
       </div>
-      <div class="hl">Elecciones 2025</div>
-    </div>
-    <div class="kpis">
-      <div class="kpi"><div class="dot"></div><div><b>Electores</b><span> 842.134</span></div></div>
-      <div class="kpi"><div class="dot"></div><div><b>Cargos a elegir</b><span> 8</span></div></div>
-      <div class="kpi"><div class="dot"></div><div><b>Papeleta</b><span><a href="https://www.servel.cl/wp-content/uploads/2025/10/DIPUTADOS_07_05_REGION_DE_VALPARAISO.pdf" target="_blank" rel="noopener">Ver</a></span></div></div>
-    </div>
-  </section>
+      <div class="kpis">
+        <div class="kpi"><div class="dot"></div><div><b>Electores</b><span> 842.134</span></div></div>
+        <div class="kpi"><div class="dot"></div><div><b>Cargos a elegir</b><span> 8</span></div></div>
+        <div class="kpi"><div class="dot"></div><div><b>Papeleta</b><span><a href="https://www.servel.cl/wp-content/uploads/2025/10/DIPUTADOS_07_05_REGION_DE_VALPARAISO.pdf" target="_blank" rel="noopener">Ver</a></span></div></div>
+      </div>
+    </section>
 
-  <!-- Filtros (bajo distrito) -->
-  <div class="filters">
-    <select id="partyFilter">
-      <option value="">Todos los partidos</option>
-    </select>
-    <select id="sexFilter">
-      <option value="">Todos los sexos</option>
-      <option value="Hombre">Hombres</option>
-      <option value="Mujer">Mujeres</option>
-      <option value="Otro">Otro</option>
-    </select>
-    <input type="number" id="minAge" placeholder="Edad mínima" min="0" style="width:120px;">
-    <input type="number" id="maxAge" placeholder="Edad máxima" min="0" style="width:120px;">
-    <button id="applyFilters" class="btn">Filtrar</button>
-    <button id="resetFilters" class="btn btn-secondary">Reiniciar</button>
-    <div class="count" id="visibleCount">—</div>
+    <!-- Filtros -->
+    <div class="filters">
+      <select id="partyFilter"><option value="">Todos los partidos</option></select>
+      <select id="sexFilter">
+        <option value="">Todos los sexos</option>
+        <option value="Hombre">Hombres</option>
+        <option value="Mujer">Mujeres</option>
+        <option value="Otro">Otro</option>
+      </select>
+      <input type="number" id="minAge" placeholder="Edad mínima" min="0" style="width:120px;">
+      <input type="number" id="maxAge" placeholder="Edad máxima" min="0" style="width:120px;">
+      <button id="applyFilters" class="btn">Filtrar</button>
+      <button id="resetFilters" class="btn btn-secondary">Reiniciar</button>
+      <div class="count" id="visibleCount">—</div>
+    </div>
   </div>
 
-  <div id="listsContainer"></div>
-
-  <div class="footer">
-    <div>Desarrollado por El Epicentro Labs</div>
-    <div id="footstamp">—</div>
+  <div class="scroll-zone">
+    <div id="listsContainer"></div>
+    <div class="footer">
+      <div>Desarrollado por El Epicentro Labs</div>
+      <div id="footstamp">—</div>
+    </div>
   </div>
 </div>
 
@@ -139,165 +153,22 @@ const DATA_URL="https://docs.google.com/spreadsheets/d/1mD4qQ9dnczdJ4lI8p8bd8TrP
 function stamp(){return new Date().toLocaleString("es-CL",{dateStyle:"medium",timeStyle:"short"});}
 function setStamp(){document.getElementById('ts').textContent="Actualizado: "+stamp();document.getElementById('footstamp').textContent="Generado: "+stamp();}
 function norm(s){return (s||"").replace(/["”“]/g,"").replace(/\s+/g," ").trim();}
-function toIntAge(s){
-  const m=String(s||"").match(/\d+/); // extrae número (edad puede venir "40 años")
-  return m?parseInt(m[0],10):NaN;
-}
-
-function parseCSV(text){
-  const lines=text.split(/\r?\n/).filter(l=>l.trim());
-  const headers=lines.shift().split(",").map(h=>h.trim().toLowerCase());
-  return lines.map(l=>{
-    const cols=l.split(",");
-    const o={}; headers.forEach((h,i)=>o[h]=cols[i]?cols[i].trim():"");
-    return o;
-  });
-}
-
-function listHeaderHTML(name){return `<div class='listbar'><div class='listdot'></div>${name}</div><div class='grid' data-list='${name}'></div>`;}
-function socials(r){
-  const i=[];
-  if(r.facebook) i.push(`<a href="${r.facebook}" target="_blank" class="fb" title="Facebook">f</a>`);
-  if(r.x)        i.push(`<a href="${r.x}" target="_blank" class="x"  title="X">𝕏</a>`);
-  if(r.instagram)i.push(`<a href="${r.instagram}" target="_blank" class="ig" title="Instagram">⌾</a>`);
-  if(r.tiktok)   i.push(`<a href="${r.tiktok}" target="_blank" class="tk" title="TikTok">♪</a>`);
-  return i.length?`<div class='socials'>${i.join("")}</div>`:"";
-}
-function cardHTML(r){
-  const img = r.photo ? `<img src="${r.photo}" alt="${r.candidate}" onerror="this.style.display='none';this.parentNode.style.background='#e5e7eb';">` : "";
-  const ageClean = toIntAge(r.age);
-  const sexClean = norm(r.sex);
-  const partyClean = norm(r.party);
-  return `<article class='card' data-party="${partyClean}" data-sex="${sexClean}" data-age="${isNaN(ageClean)?'':ageClean}">
-    <div class='card-hd'>
-      <div class='img-wrap no-ctx'>${img}<div class='blocker'></div></div>
-      <div class='titlebox'>
-        <div class='name'>${r.candidate||"—"}</div>
-        <div class='sub'>${r.party||""}</div>
-        <div class='badges'>
-          ${r.party?`<span class='badge party'>${r.party}</span>`:""}
-          ${r.cupo?`<span class='badge'>${r.cupo}</span>`:""}
-          ${r.number?`<span class='badge num'>${r.number}</span>`:""}
-        </div>
-      </div>
-    </div>
-    <div class='card-bd'>
-      <div class='rowkv'><div class='k'>Edad</div><div class='v'>${r.age||"—"}</div></div>
-      <div class='rowkv'><div class='k'>Profesión</div><div class='v'>${r.profession||"—"}</div></div>
-      <div class='rowkv'><div class='k'>Distrito</div><div class='v'>${r.district||"—"}</div></div>
-      <div class='desc'>${r.bio||""}</div>
-    </div>
-    <div class='card-ft'>${socials(r)}</div>
-  </article>`;
-}
-
-function isListHeaderRow(r){
-  const cand = norm(r.candidate||"");
-  return cand.toLowerCase().startsWith("lista");
-}
-
-function populatePartyFilter(rows){
-  const select = document.getElementById("partyFilter");
-  const set = new Set();
-  rows.forEach(r=>{
-    if(!isListHeaderRow(r) && r.party) set.add(norm(r.party));
-  });
-  const parties = Array.from(set).sort((a,b)=>a.localeCompare(b,'es'));
-  parties.forEach(p=>{
-    const opt=document.createElement("option");
-    opt.value=p; opt.textContent=p;
-    select.appendChild(opt);
-  });
-}
-
-function updateVisibleCount(){
-  const total = document.querySelectorAll('.card').length;
-  const visible = Array.from(document.querySelectorAll('.card')).filter(c=>c.style.display!== 'none').length;
-  document.getElementById('visibleCount').textContent = `${visible}/${total} visibles`;
-}
-
-function applyFilters(){
-  const pf = norm(document.getElementById("partyFilter").value);
-  const sf = norm(document.getElementById("sexFilter").value); // "Hombre", "Mujer", "Otro" o ""
-  const minA = parseInt(document.getElementById("minAge").value,10);
-  const maxA = parseInt(document.getElementById("maxAge").value,10);
-
-  document.querySelectorAll('.card').forEach(card=>{
-    const party = norm(card.dataset.party||"");
-    const sex   = norm(card.dataset.sex||"");
-    const age   = parseInt(card.dataset.age,10);
-
-    let ok = true;
-    if(pf && party !== pf) ok = false;
-    if(sf && sex !== sf) ok = false;
-
-    if(!isNaN(minA)){
-      if(isNaN(age) || age < minA) ok = false;
-    }
-    if(!isNaN(maxA)){
-      if(isNaN(age) || age > maxA) ok = false;
-    }
-
-    card.style.display = ok ? "" : "none";
-  });
-
-  // Ocultar contenedores de lista sin elementos visibles
-  document.querySelectorAll('[data-list]').forEach(grid=>{
-    const anyVisible = Array.from(grid.children).some(ch => ch.classList.contains('card') && ch.style.display!=='none');
-    const bar = grid.previousElementSibling; // listbar
-    grid.style.display = anyVisible ? "" : "none";
-    if(bar && bar.classList.contains('listbar')) bar.style.display = anyVisible ? "" : "none";
-  });
-
-  updateVisibleCount();
-}
-
-function attachFilterEvents(){
-  document.getElementById("applyFilters").addEventListener("click", applyFilters);
-  document.getElementById("resetFilters").addEventListener("click", ()=>{
-    document.getElementById("partyFilter").value="";
-    document.getElementById("sexFilter").value="";
-    document.getElementById("minAge").value="";
-    document.getElementById("maxAge").value="";
-    applyFilters();
-  });
-
-  // Aplicación inmediata al cambiar (opcional, UX ágil)
-  ["partyFilter","sexFilter","minAge","maxAge"].forEach(id=>{
-    document.getElementById(id).addEventListener("input", ()=>applyFilters());
-  });
-}
-
-async function load(){
-  const res=await fetch(DATA_URL+"&t="+Date.now(),{cache:"no-store"});
-  const csv=await res.text();
-  const rows=parseCSV(csv);
-
-  const cont=document.getElementById("listsContainer");
-  cont.innerHTML="";
-  let current="";
-
-  // pintar UI
-  rows.forEach(r=>{
-    if(isListHeaderRow(r)){
-      current=norm(r.candidate||"Lista");
-      cont.insertAdjacentHTML("beforeend",listHeaderHTML(current));
-    }else{
-      const grid=cont.querySelector(`[data-list='${current}']`);
-      if(grid) grid.insertAdjacentHTML("beforeend",cardHTML(r));
-    }
-  });
-
-  // Protege click derecho sobre imágenes
-  document.addEventListener('contextmenu',e=>{if(e.target.closest('.img-wrap'))e.preventDefault();});
-
-  // Filtros
-  populatePartyFilter(rows);
-  attachFilterEvents();
-  applyFilters(); // inicial
-  setStamp();
-}
+function toIntAge(s){const m=String(s||"").match(/\d+/);return m?parseInt(m[0],10):NaN;}
+function parseCSV(text){const lines=text.split(/\r?\n/).filter(l=>l.trim());const h=lines.shift().split(",").map(x=>x.trim().toLowerCase());
+return lines.map(l=>{const c=l.split(","),o={};h.forEach((hh,i)=>o[hh]=c[i]?c[i].trim():"");return o;});}
+function listHeaderHTML(n){return `<div class='listbar'><div class='listdot'></div>${n}</div><div class='grid' data-list='${n}'></div>`;}
+function socials(r){const i=[];if(r.facebook)i.push(`<a href="${r.facebook}" target="_blank" class="fb" title="Facebook">f</a>`);if(r.x)i.push(`<a href="${r.x}" target="_blank" class="x" title="X">𝕏</a>`);if(r.instagram)i.push(`<a href="${r.instagram}" target="_blank" class="ig" title="Instagram">⌾</a>`);if(r.tiktok)i.push(`<a href="${r.tiktok}" target="_blank" class="tk" title="TikTok">♪</a>`);return i.length?`<div class='socials'>${i.join("")}</div>`:"";}
+function cardHTML(r){const img=r.photo?`<img src="${r.photo}" alt="${r.candidate}" onerror="this.style.display='none';this.parentNode.style.background='#e5e7eb';">`:"";const age=toIntAge(r.age);return `<article class='card' data-party="${norm(r.party)}" data-sex="${norm(r.sex)}" data-age="${isNaN(age)?'':age}">
+<div class='card-hd'><div class='img-wrap no-ctx'>${img}<div class='blocker'></div></div><div class='titlebox'><div class='name'>${r.candidate||"—"}</div><div class='sub'>${r.party||""}</div><div class='badges'>${r.party?`<span class='badge party'>${r.party}</span>`:""}${r.cupo?`<span class='badge'>${r.cupo}</span>`:""}${r.number?`<span class='badge num'>${r.number}</span>`:""}</div></div></div>
+<div class='card-bd'><div class='rowkv'><div class='k'>Edad</div><div class='v'>${r.age||"—"}</div></div><div class='rowkv'><div class='k'>Profesión</div><div class='v'>${r.profession||"—"}</div></div><div class='rowkv'><div class='k'>Distrito</div><div class='v'>${r.district||"—"}</div></div><div class='desc'>${r.bio||""}</div></div><div class='card-ft'>${socials(r)}</div></article>`;}
+function isListHeaderRow(r){return norm(r.candidate||"").toLowerCase().startsWith("lista");}
+function populatePartyFilter(rows){const sel=document.getElementById("partyFilter"),set=new Set();rows.forEach(r=>{if(!isListHeaderRow(r)&&r.party)set.add(norm(r.party));});[...set].sort().forEach(p=>{const o=document.createElement("option");o.value=p;o.textContent=p;sel.appendChild(o);});}
+function updateVisibleCount(){const t=document.querySelectorAll('.card').length,v=[...document.querySelectorAll('.card')].filter(c=>c.style.display!=='none').length;document.getElementById('visibleCount').textContent=`${v}/${t} visibles`;}
+function applyFilters(){const pf=norm(partyFilter.value),sf=norm(sexFilter.value),min=parseInt(minAge.value)||NaN,max=parseInt(maxAge.value)||NaN;document.querySelectorAll('.card').forEach(c=>{const p=norm(c.dataset.party),s=norm(c.dataset.sex),a=parseInt(c.dataset.age)||NaN;let ok=true;if(pf&&p!==pf)ok=false;if(sf&&s!==sf)ok=false;if(!isNaN(min)&&(!a||a<min))ok=false;if(!isNaN(max)&&(!a||a>max))ok=false;c.style.display=ok?"":"none";});document.querySelectorAll('[data-list]').forEach(g=>{const vis=[...g.children].some(x=>x.style.display!=='none');g.style.display=vis?"":"none";const b=g.previousElementSibling;if(b&&b.classList.contains('listbar'))b.style.display=vis?"":"none";});updateVisibleCount();}
+function attachFilterEvents(){applyFilters();applyFiltersBtn.addEventListener('click',applyFilters);resetFilters.addEventListener('click',()=>{partyFilter.value='';sexFilter.value='';minAge.value='';maxAge.value='';applyFilters();});["partyFilter","sexFilter","minAge","maxAge"].forEach(id=>document.getElementById(id).addEventListener("input",applyFilters));}
+async function load(){const res=await fetch(DATA_URL+"&t="+Date.now(),{cache:"no-store"});const csv=await res.text();const rows=parseCSV(csv);const cont=document.getElementById("listsContainer");cont.innerHTML="";let cur="";rows.forEach(r=>{if(isListHeaderRow(r)){cur=norm(r.candidate);cont.insertAdjacentHTML("beforeend",listHeaderHTML(cur));}else{const g=cont.querySelector(`[data-list='${cur}']`);if(g)g.insertAdjacentHTML("beforeend",cardHTML(r));}});document.addEventListener('contextmenu',e=>{if(e.target.closest('.img-wrap'))e.preventDefault();});populatePartyFilter(rows);attachFilterEvents();setStamp();}
 load();
 </script>
 </body>
 </html>
+
